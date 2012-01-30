@@ -5,47 +5,54 @@ using Model;
 namespace Tests
 {
     [TestClass]
-    public class TestExcelDataLoader
+    public abstract class TestExcelDataLoader
     {
-        [TestMethod]
-        public void LoadBinaryWorkbook_WithBiffFormat_ReturnObject()
+        protected IExcelReaderRepository ReaderRepository;
+
+        [TestCleanup()]
+        public void Initialize()
         {
-            FileStream stream = File.Open(@"..\..\..\Tests\ExcelTemplates\BasicExcelBiff.xls", FileMode.Open, FileAccess.Read);
-            var repository = new ExcelDataReaderRepository();
-            Assert.IsNotNull(repository.LoadBinaryWorkbook(stream));
+            if (ReaderRepository != null)
+            {
+                ReaderRepository.Dispose();
+            }
         }
 
         /// <summary>
         /// Loads the excel biff wrong format.
         /// </summary>
         [TestMethod]
-        public void LoadBinaryWorkbook_WithOpenXMLFormat_ReturnNULL()
+        public void LoadOpenXmlWorkbook__WithOpenXMLFormat_ReturnObject()
         {
-            FileStream stream = File.Open(@"..\..\..\Tests\ExcelTemplates\BasicExcelBiff_xlsxFormat.xlsx", FileMode.Open, FileAccess.Read);
-            var repository = new ExcelDataReaderRepository();
-            Assert.IsNull(repository.LoadBinaryWorkbook(stream));
+            using (var stream = File.Open(@"..\..\..\Tests\ExcelTemplates\BasicExcelBiff_xlsxFormat.xlsx", FileMode.Open, FileAccess.Read))
+            {
+                Assert.IsNotNull(ReaderRepository.LoadOpenXmlWorkbook(stream));
+            }
         }
 
         /// <summary>
         /// Loads the excel biff wrong format.
         /// </summary>
         [TestMethod]
-        public void LoadWorkbook__WithOpenXMLFormat_ReturnObject()
+        public void LoadOpenXmlWorkbook__WithBiffXMLFormat_ReturnNULL()
         {
-            FileStream stream = File.Open(@"..\..\..\Tests\ExcelTemplates\BasicExcelBiff_xlsxFormat.xlsx", FileMode.Open, FileAccess.Read);
-            var repository = new ExcelDataReaderRepository();
-            Assert.IsNotNull(repository.LoadWorkbook(stream));
+            using (var stream = File.Open(@"..\..\..\Tests\ExcelTemplates\BasicExcelBiff.xls", FileMode.Open, FileAccess.Read))
+            {
+                Assert.IsNull(ReaderRepository.LoadOpenXmlWorkbook(stream));
+            }
         }
 
-        /// <summary>
-        /// Loads the excel biff wrong format.
-        /// </summary>
-        [TestMethod]
-        public void LoadWorkbook__WithOpenXMLFormat_ReturnNULL()
-        {
-            FileStream stream = File.Open(@"..\..\..\Tests\ExcelTemplates\BasicExcelBiff.xls", FileMode.Open, FileAccess.Read);
-            var repository = new ExcelDataReaderRepository();
-            Assert.IsNull(repository.LoadWorkbook(stream));
-        }
+        //[TestMethod]
+        //public void GetDataSet_WithBiffFormat_ReturnDataSet()
+        //{
+        //    using (var stream = File.Open(@"..\..\..\Tests\ExcelTemplates\BasicExcelBiff.xls", FileMode.Open, FileAccess.Read))
+        //    {
+        //        using (var repository = new ExcelDataReaderRepository())
+        //        {
+        //            var res = repository.LoadBinaryWorkbook(stream).GetValue(2, 2);
+        //            var res2 = repository.LoadBinaryWorkbook(stream).GetValue(2, 3);
+        //        }
+        //    }
+        //}
     }
 }

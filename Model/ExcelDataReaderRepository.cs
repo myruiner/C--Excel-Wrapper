@@ -4,7 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Data;
 using System.IO;
+using System.Linq;
 using Excel;
 
 namespace Model
@@ -16,23 +18,73 @@ namespace Model
     {
         private IExcelDataReader _reader;
 
+        private DataSet _ds;
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             if (_reader != null)
             {
+                _reader.Close();
                 _reader.Dispose();
             }
         }
 
-        public object LoadWorkbook(FileStream filestream)
+        /// <summary>
+        /// Loads the open XML workbook.
+        /// </summary>
+        /// <param name="filestream">The filestream.</param>
+        /// <returns></returns>
+        public IExcelReaderRepository LoadOpenXmlWorkbook(FileStream filestream)
         {
-            return LoadBinaryWorkbook(filestream);
+            _reader = ExcelReaderFactory.CreateOpenXmlReader(filestream);
+            return !_reader.IsValid ? null : this;
         }
 
-        public object LoadBinaryWorkbook(FileStream filestream)
+        /// <summary>
+        /// Loads the binary workbook.
+        /// </summary>
+        /// <param name="filestream">The filestream.</param>
+        /// <returns></returns>
+        public IExcelReaderRepository LoadBinaryWorkbook(FileStream filestream)
         {
             _reader = ExcelReaderFactory.CreateBinaryReader(filestream);
-            return !_reader.IsValid ? null : _reader;
+            return !_reader.IsValid ? null : this;
+        }
+
+        /// <summary>
+        /// Gets the name of the value by.
+        /// </summary>
+        /// <param name="cellName">Name of the cell.</param>
+        /// <returns></returns>
+        public object GetValueByName(string cellName)
+        {
+            object res = null;
+            while (_reader.Read())
+            {
+                var index = _reader.GetOrdinal(cellName);
+            }
+            return res;
+        }
+
+        public DataSet GetDataSet()
+        {
+            var res = _reader.AsDataSet();
+            return res;
+        }
+
+        public IQueryable GetWorksheetContent(int id)
+        {
+            var res = _reader.AsDataSet();
+            return res.Tables[0].AsEnumerable().AsQueryable();
+        }
+
+        public object GetValue(int row, int column)
+        {
+            _ds = _reader.AsDataSet();
+            return _ds.Tables[0].Rows[row][column];
         }
     }
 }
