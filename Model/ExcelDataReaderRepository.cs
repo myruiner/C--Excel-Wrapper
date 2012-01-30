@@ -32,7 +32,7 @@ namespace Model
         public object LoadBinaryWorkbook(FileStream filestream)
         {
             _reader = ExcelReaderFactory.CreateBinaryReader(filestream);
-            return _reader;
+            return !_reader.IsValid ? null : _reader;
         }
     }
 }
