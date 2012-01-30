@@ -15,6 +15,9 @@ namespace Tests
             Assert.IsNotNull(repository.LoadBinaryWorkbook(stream));
         }
 
+        /// <summary>
+        /// Loads the excel biff wrong format.
+        /// </summary>
         [TestMethod]
         public void LoadExcelBiffWrongFormat()
         {
