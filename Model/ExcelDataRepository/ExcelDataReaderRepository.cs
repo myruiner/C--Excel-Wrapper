@@ -1,15 +1,16 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="ExcelDataReaderRepository.cs" company="Trivadis AG">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Data;
 using System.IO;
 using System.Linq;
 using Excel;
 
-namespace Model
+namespace Model.ExcelDataRepository
 {
     /// <summary>
     /// TODO: Update summary.
@@ -25,11 +26,9 @@ namespace Model
         /// </summary>
         public void Dispose()
         {
-            if (_reader != null)
-            {
-                _reader.Close();
-                _reader.Dispose();
-            }
+            if (_reader == null) return;
+            _reader.Close();
+            _reader.Dispose();
         }
 
         /// <summary>
@@ -40,6 +39,11 @@ namespace Model
         public IExcelReaderRepository LoadOpenXmlWorkbook(FileStream filestream)
         {
             _reader = ExcelReaderFactory.CreateOpenXmlReader(filestream);
+            if (!_reader.IsValid)
+            {
+                throw new ApplicationException("OpenXML Format not recognized");
+            }
+
             return !_reader.IsValid ? null : this;
         }
 
@@ -51,6 +55,11 @@ namespace Model
         public IExcelReaderRepository LoadBinaryWorkbook(FileStream filestream)
         {
             _reader = ExcelReaderFactory.CreateBinaryReader(filestream);
+            if (!_reader.IsValid)
+            {
+                throw new ApplicationException("BIFF Format not recognized");
+            }
+
             return !_reader.IsValid ? null : this;
         }
 
