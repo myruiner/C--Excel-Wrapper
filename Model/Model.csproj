@@ -56,10 +56,9 @@
   <ItemGroup>
     <Compile Include="CodaxyRepository\CodaxyExcelDataReaderRepository.cs" />
     <Compile Include="ExcelDataRepository\ExcelDataReaderRepository.cs" />
+    <Compile Include="ExcelReader.cs" />
     <Compile Include="IExcelReaderProvider.cs" />
-    <Compile Include="IExcelReaderRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Worksheet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lib\ICSharpCode.SharpZipLib.dll" />
