@@ -40,7 +40,7 @@ namespace Model.Providers
             throw new NotImplementedException();
         }
 
-        public DataTable GetValueFromNamedCell(int columnStart, int rowStart, int colunmnEnd, int rowEnd)
+        public DataTable GetValueFromRange(int columnStart, int rowStart, int colunmnEnd, int rowEnd)
         {
             throw new NotImplementedException();
         }
@@ -100,7 +100,7 @@ namespace Model.Providers
             return this;
         }
 
-        public DataSet ToDataSet()
+        public DataSet ToDataSet(bool isFirstRowAsColumnNames)
         {
             throw new NotImplementedException();
         }

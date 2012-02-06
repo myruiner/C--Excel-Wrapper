@@ -77,7 +77,7 @@ namespace Model
         /// <returns></returns>
         public DataTable GetValueFromRange(int columnStart, int rowStart, int colunmnEnd, int rowEnd)
         {
-            return _provider.GetValueFromNamedCell(columnStart, rowStart, colunmnEnd, rowEnd);
+            return _provider.GetValueFromRange(columnStart, rowStart, colunmnEnd, rowEnd);
         }
 
         /// <summary>

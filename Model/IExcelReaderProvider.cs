@@ -17,18 +17,28 @@ namespace Model
     {
         object GetValueFromCell(int column, int row);
 
-        object GetValueFromCell(string column);
+        object GetValueFromCell(string cellDescription);
 
-        DataTable GetValueFromNamedCell(int columnStart, int rowStart, int colunmnEnd, int rowEnd);
+        object GetValueFromNamedCell(string namedCell);
 
-        object GetValueFromNamedCell(string columnStart);
-
-        DataTable GetValueFromNamedRange(string name);
+        DataTable GetValueFromRange(int columnStart, int rowStart, int colunmnEnd, int rowEnd);
 
         DataTable GetValueFromRange(string text);
 
+        DataTable GetValueFromNamedRange(string namedRange);
+
+        /// <summary>
+        /// Return the named specified Worksheet as a DataTable
+        /// </summary>
+        /// <param name="worksheetName">Name of the worksheet.</param>
+        /// <returns></returns>
         DataTable GetWorksheetContent(string worksheetName);
 
+        /// <summary>
+        /// Return the index specified Worksheet as a DataTable
+        /// </summary>
+        /// <param name="worksheetIndex">Index of the worksheet.</param>
+        /// <returns></returns>
         DataTable GetWorksheetContent(int worksheetIndex);
 
         IExcelReaderProvider LoadFromBinaryFile(FileStream stream);
@@ -36,5 +46,11 @@ namespace Model
         IExcelReaderProvider LoadFromOpenXMLFile(FileStream stream);
 
         DataSet ToDataSet();
+
+        IExcelReaderProvider WithFirstRowAsColumnName(bool isFirstRowAsColumnName);
+
+        IExcelReaderProvider SetCurrentWorksheet(string name);
+
+        IExcelReaderProvider SetCurrentWorksheet(int index);
     }
 }
