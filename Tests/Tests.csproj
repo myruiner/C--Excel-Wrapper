@@ -39,9 +39,9 @@
     <Reference Include="Codaxy.Xlio.XmlSerializers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Codaxy.Xlio.0.8.8\lib\Codaxy.Xlio.XmlSerializers.dll</HintPath>
     </Reference>
-    <Reference Include="Excel, Version=2.1.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+    <Reference Include="Excel, Version=2.0.1.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ExcelDataReader.2.1\lib\net20\Excel.dll</HintPath>
+      <HintPath>..\Model\Lib\Excel.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -64,11 +64,10 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExcelReaderLib\TestOpenBinaryExcel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestExcelDataLoader.cs" />
-    <Compile Include="ExcelReaderLib\TestOpenXMLExcel.cs" />
-    <Compile Include="CodaxyLib\TestOpenXMLExcel.cs" />
+    <Compile Include="BaseExcelReaderTest.cs" />
+    <Compile Include="CodaxyProvider_ExcelReaderTest.cs" />
+    <Compile Include="ExcelReaderProvider_ExcelReaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">
@@ -79,8 +78,8 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="ExcelTemplates\BasicExcelBiff.xls" />
-    <None Include="ExcelTemplates\BasicExcelBiff_xlsxFormat.xlsx" />
+    <None Include="ExcelTemplates\BasicBiff.xls" />
+    <None Include="ExcelTemplates\BasicOpenXML.xlsx" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

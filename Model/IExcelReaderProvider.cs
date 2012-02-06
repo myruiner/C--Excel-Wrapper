@@ -15,8 +15,6 @@ namespace Model
     /// </summary>
     public interface IExcelReaderProvider : IDisposable
     {
-        IExcelReaderProvider ConfigureProvider();
-
         object GetValueFromCell(int column, int row);
 
         object GetValueFromCell(string column);
@@ -34,8 +32,6 @@ namespace Model
         DataTable GetWorksheetContent(int worksheetIndex);
 
         IExcelReaderProvider LoadFromBinaryFile(FileStream stream);
-
-        void LoadFromFile(FileStream stream);
 
         IExcelReaderProvider LoadFromOpenXMLFile(FileStream stream);
 

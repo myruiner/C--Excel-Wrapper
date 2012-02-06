@@ -54,13 +54,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodaxyRepository\CodaxyExcelDataReaderRepository.cs" />
-    <Compile Include="ExcelDataRepository\ExcelDataReaderRepository.cs" />
+    <Compile Include="Providers\CodaxyExcelProvider.cs" />
     <Compile Include="ExcelReader.cs" />
     <Compile Include="IExcelReaderProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\ExcelDataReaderProvider.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Lib\Excel.dll" />
     <Content Include="Lib\ICSharpCode.SharpZipLib.dll" />
   </ItemGroup>
   <ItemGroup>

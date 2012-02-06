@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{413D34FE-ACE9-40FD-A37A-C3CF16C943F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{F6D183EF-9EE1-448D-8788-048CFAFA2231}"
@@ -27,16 +25,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{DC5F69AE-BA5A-4D23-9B3C-D3139A7F7CE2}.Release|x86.ActiveCfg = Release|Any CPU
 		{413D34FE-ACE9-40FD-A37A-C3CF16C943F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{413D34FE-ACE9-40FD-A37A-C3CF16C943F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{413D34FE-ACE9-40FD-A37A-C3CF16C943F0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

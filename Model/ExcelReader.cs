@@ -114,10 +114,14 @@ namespace Model
         /// Loads the file.
         /// </summary>
         /// <param name="stream">The stream.</param>
+        /// <param name="isOpenXML"> </param>
         /// <returns></returns>
-        public ExcelReader LoadFile(FileStream stream)
+        public ExcelReader LoadFile(FileStream stream, bool isOpenXML)
         {
-            _provider.LoadFromFile(stream);
+            if (isOpenXML)
+                _provider.LoadFromOpenXMLFile(stream);
+            else
+                _provider.LoadFromBinaryFile(stream);
             return this;
         }
 
