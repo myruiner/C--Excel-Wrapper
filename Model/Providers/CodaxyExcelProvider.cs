@@ -18,24 +18,17 @@ namespace Model.Providers
     {
         private SheetCollection _sheetCollection;
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-        }
-
-        public DataSet GetDataSet()
-        {
-            throw new NotImplementedException();
-        }
-
         public object GetValueFromCell(int column, int row)
         {
             throw new NotImplementedException();
         }
 
-        public object GetValueFromCell(string column)
+        public object GetValueFromCell(string cellDescription)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetValueFromNamedCell(string namedCell)
         {
             throw new NotImplementedException();
         }
@@ -45,39 +38,24 @@ namespace Model.Providers
             throw new NotImplementedException();
         }
 
-        public object GetValueFromNamedCell(string columnStart)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DataTable GetValueFromNamedRange(string name)
-        {
-            throw new NotImplementedException();
-        }
-
         public DataTable GetValueFromRange(string text)
         {
             throw new NotImplementedException();
         }
 
-        public DataTable GetWorksheetContent(string worksheetName)
+        public DataTable GetValueFromNamedRange(string namedRange)
         {
             throw new NotImplementedException();
         }
 
-        public DataTable GetWorksheetContent(int worksheetIndex)
+        public DataTable GetWorksheetContent()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Loads from binary file.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
         public IExcelReaderProvider LoadFromBinaryFile(FileStream stream)
         {
-            throw new ApplicationException("Binary Format not supported by CodaxyExcelDataReader");
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -100,12 +78,27 @@ namespace Model.Providers
             return this;
         }
 
-        public DataSet ToDataSet(bool isFirstRowAsColumnNames)
+        public DataSet ToDataSet()
         {
             throw new NotImplementedException();
         }
 
-        public object GetValue(int row, int column)
+        public IExcelReaderProvider WithFirstRowAsColumnName(bool isFirstRowAsColumnName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IExcelReaderProvider SetCurrentWorksheet(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IExcelReaderProvider SetCurrentWorksheet(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
         {
             throw new NotImplementedException();
         }

@@ -27,19 +27,12 @@ namespace Model
 
         DataTable GetValueFromNamedRange(string namedRange);
 
-        /// <summary>
-        /// Return the named specified Worksheet as a DataTable
+        /// <summary>specified
+        /// Return the content of the current  Worksheet as a DataTable
         /// </summary>
         /// <param name="worksheetName">Name of the worksheet.</param>
         /// <returns></returns>
-        DataTable GetWorksheetContent(string worksheetName);
-
-        /// <summary>
-        /// Return the index specified Worksheet as a DataTable
-        /// </summary>
-        /// <param name="worksheetIndex">Index of the worksheet.</param>
-        /// <returns></returns>
-        DataTable GetWorksheetContent(int worksheetIndex);
+        DataTable GetWorksheetContent();
 
         IExcelReaderProvider LoadFromBinaryFile(FileStream stream);
 

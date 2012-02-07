@@ -19,7 +19,7 @@ namespace Model.Providers
         private DataSet _internalDataSet;
         private bool _isFirstRowAsColumnNames;
         private IExcelDataReader _reader;
-        private int _currentActiveWorksheet;
+        private int _currentActiveWorksheetIndex;
 
         /// <summary>
         /// Gets the name of the value by.
@@ -82,34 +82,13 @@ namespace Model.Providers
             throw new ApplicationException("This provider does not support accessing a range by the corresponding Text description");
         }
 
-        /// <summary>
-        /// Return the named specified Worksheet as a DataTable
-        /// </summary>
-        /// <param name="worksheetName">Name of the worksheet.</param>
-        /// <returns></returns>
-        public DataTable GetWorksheetContent(string worksheetName)
+        public DataTable GetWorksheetContent()
         {
             if (_internalDataSet == null)
                 throw new ApplicationException("Internal DataSet is null");
             if (!_internalDataSet.Tables.Contains(worksheetName))
-                throw new ApplicationException(string.Format("Worksheet with name {0} does not exist in this Spreasheet", worksheetName));
 
-            return _internalDataSet.Tables[worksheetName];
-        }
-
-        /// <summary>
-        /// Return the index specified Worksheet as a DataTable
-        /// </summary>
-        /// <param name="worksheetIndex">Index of the worksheet.</param>
-        /// <returns></returns>
-        public DataTable GetWorksheetContent(int worksheetIndex)
-        {
-            if (_internalDataSet == null)
-                throw new ApplicationException("Internal DataSet is null");
-            if (_internalDataSet.Tables.Count <= worksheetIndex)
-                throw new ApplicationException(string.Format("Worksheet with index {0} does not exist in this Spreasheet", worksheetIndex));
-
-            return _internalDataSet.Tables[worksheetIndex];
+                return _internalDataSet.Tables[_currentActiveWorksheetIndex];
         }
 
         public IExcelReaderProvider LoadFromBinaryFile(FileStream stream)
@@ -123,13 +102,25 @@ namespace Model.Providers
             return this;
         }
 
-        public IExcelReaderProvider SetCurrentWorksheet(string name)
+        public IExcelReaderProvider SetCurrentWorksheet(string worksheetName)
         {
+            if (_internalDataSet == null)
+                throw new ApplicationException("Internal DataSet is null");
+            if (!_internalDataSet.Tables.Contains(worksheetName))
+                throw new ApplicationException(string.Format("Worksheet with name {0} does not exist in this Spreasheet", worksheetName));
+
+            _currentActiveWorksheetIndex = _internalDataSet.Tables.IndexOf(worksheetName);
             return this;
         }
 
-        public IExcelReaderProvider SetCurrentWorksheet(int index)
+        public IExcelReaderProvider SetCurrentWorksheet(int worksheetIndex)
         {
+            if (_internalDataSet == null)
+                throw new ApplicationException("Internal DataSet is null");
+            if (_internalDataSet.Tables.Count <= worksheetIndex)
+                throw new ApplicationException(string.Format("Worksheet with index {0} does not exist in this Spreasheet", worksheetIndex));
+
+            _currentActiveWorksheetIndex = worksheetIndex;
             return this;
         }
 
