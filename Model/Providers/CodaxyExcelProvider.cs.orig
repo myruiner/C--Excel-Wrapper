@@ -1,0 +1,266 @@
+<<<<<<< HEAD
+// -----------------------------------------------------------------------
+// <copyright file="CodaxyExcelDataReaderRepository.cs" company="Trivadis AG">
+// TODO: Update copyright text.
+// </copyright>
+// -----------------------------------------------------------------------
+
+using System;
+using System.Data;
+using System.IO;
+using Codaxy.Xlio;
+
+namespace Model.Providers
+{
+    /// <summary>
+    /// TODO: Update summary.
+    /// </summary>
+    public class CodaxyExcelProvider : IExcelReaderProvider
+    {
+        private SheetCollection _sheetCollection;
+
+        private string _currentWorksheetName;
+
+        /// <summary>
+        /// Gets or sets the name of the current worksheet.
+        /// </summary>
+        /// <value>
+        /// The name of the current worksheet.
+        /// </value>
+        public string CurrentWorksheetName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_currentWorksheetName))
+                    _currentWorksheetName = _sheetCollection[0].SheetName;
+                return _currentWorksheetName;
+            }
+            set { _currentWorksheetName = value; }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+        }
+
+        /// <summary>
+        /// Gets the content of cell identified by ID
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="row">The row.</param>
+        /// <returns></returns>
+        public object GetValueFromCellByID(int column, int row)
+        {
+            return _sheetCollection[CurrentWorksheetName].Cells[row, column].Value ?? DBNull.Value;
+        }
+
+        public object GetValueFromCellByAddress(string cellDescription)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetValueFromCellByName(string columnStart)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataTable GetValueFromRangeByID(int columnStart, int rowStart, int colunmnEnd, int rowEnd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataTable GetValueFromRangeByAddress(string address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataTable GetValueFromRangeByID(string text)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataTable GetValueFromRangeByName(string namedRange)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataTable GetWorksheetContent()
+        {
+            var dataTable = new DataTable();
+            return dataTable;
+        }
+
+        /// <summary>
+        /// Loads from binary file.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider LoadFromBinaryFile(FileStream stream)
+        {
+            throw new ApplicationException("Binary Format not supported by CodaxyExcelDataReader");
+        }
+
+        /// <summary>
+        /// Loads from open XML file.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider LoadFromOpenXMLFile(FileStream stream)
+        {
+            try
+            {
+                var wb = Workbook.ReadStream(stream);
+                _sheetCollection = wb.Sheets;
+            }
+            catch
+            {
+                throw new ApplicationException("OpenXML Format not recognized");
+            }
+
+            return this;
+        }
+
+        public DataSet ToDataSet()
+        {
+            throw new ApplicationException("Methode is not supported by this provider");
+        }
+
+        public IExcelReaderProvider WithFirstRowAsColumnName(bool isFirstRowAsColumnName)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Sets the current worksheet by Name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider SetCurrentWorksheet(string name)
+        {
+            if (_sheetCollection[name] != null)
+                CurrentWorksheetName = name;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the current worksheet by his index
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider SetCurrentWorksheet(int index)
+        {
+            if (_sheetCollection[index] != null)
+                CurrentWorksheetName = _sheetCollection[index].SheetName;
+            return this;
+        }
+    }
+=======
+// -----------------------------------------------------------------------
+// <copyright file="CodaxyExcelDataReaderRepository.cs" company="Trivadis AG">
+// TODO: Update copyright text.
+// </copyright>
+// -----------------------------------------------------------------------
+
+using System;
+using System.Data;
+using System.IO;
+using Codaxy.Xlio;
+
+namespace Model.Providers
+{
+    /// <summary>
+    /// TODO: Update summary.
+    /// </summary>
+    public class CodaxyExcelProvider : IExcelReaderProvider
+    {
+        private SheetCollection _sheetCollection;
+
+        public object GetValueFromCell(int column, int row)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetValueFromCell(string cellDescription)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetValueFromNamedCell(string namedCell)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataTable GetValueFromRange(int columnStart, int rowStart, int colunmnEnd, int rowEnd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataTable GetValueFromRange(string text)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataTable GetValueFromNamedRange(string namedRange)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DataTable GetWorksheetContent()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IExcelReaderProvider LoadFromBinaryFile(FileStream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Loads from open XML file.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider LoadFromOpenXMLFile(FileStream stream)
+        {
+            try
+            {
+                var wb = Workbook.ReadStream(stream);
+                _sheetCollection = wb.Sheets;
+            }
+            catch
+            {
+                throw new ApplicationException("OpenXML Format not recognized");
+            }
+
+            return this;
+        }
+
+        public DataSet ToDataSet()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IExcelReaderProvider WithFirstRowAsColumnName(bool isFirstRowAsColumnName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IExcelReaderProvider SetCurrentWorksheet(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IExcelReaderProvider SetCurrentWorksheet(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+>>>>>>> 56374e683ca67b55f8cdd29f98122956f3900ccb
+}
