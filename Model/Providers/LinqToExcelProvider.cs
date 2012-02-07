@@ -6,6 +6,7 @@
 
 using System.Data;
 using System.IO;
+using System.Linq;
 using LinqToExcel;
 using Model.Extensions;
 
@@ -66,6 +67,9 @@ namespace Model.Providers
             var tempFile = stream.CopyStreamToTemp();
 
             var excelReader = new ExcelQueryFactory(tempFile.FullName);
+
+            var indianaCompanies = from c in excelReader.WorksheetRangeNoHeader("A1", "G10") //Selects data within the B3 to G10 cell range
+                                   select c;
             tempFile.Delete();
             return this;
         }
