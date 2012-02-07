@@ -18,6 +18,25 @@ namespace Model.Providers
     {
         private SheetCollection _sheetCollection;
 
+        private string _currentWorksheetName;
+
+        /// <summary>
+        /// Gets or sets the name of the current worksheet.
+        /// </summary>
+        /// <value>
+        /// The name of the current worksheet.
+        /// </value>
+        public string CurrentWorksheetName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_currentWorksheetName))
+                    _currentWorksheetName = _sheetCollection[0].SheetName;
+                return _currentWorksheetName;
+            }
+            set { _currentWorksheetName = value; }
+        }
+
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -25,49 +44,51 @@ namespace Model.Providers
         {
         }
 
-        public DataSet GetDataSet()
+        /// <summary>
+        /// Gets the content of cell identified by ID
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="row">The row.</param>
+        /// <returns></returns>
+        public object GetValueFromCellByID(int column, int row)
+        {
+            return _sheetCollection[CurrentWorksheetName].Cells[row, column].Value ?? DBNull.Value;
+        }
+
+        public object GetValueFromCellByAddress(string cellDescription)
         {
             throw new NotImplementedException();
         }
 
-        public object GetValueFromCell(int column, int row)
+        public object GetValueFromCellByName(string columnStart)
         {
             throw new NotImplementedException();
         }
 
-        public object GetValueFromCell(string column)
+        public DataTable GetValueFromRangeByID(int columnStart, int rowStart, int colunmnEnd, int rowEnd)
         {
             throw new NotImplementedException();
         }
 
-        public DataTable GetValueFromRange(int columnStart, int rowStart, int colunmnEnd, int rowEnd)
+        public DataTable GetValueFromRangeByAddress(string address)
         {
             throw new NotImplementedException();
         }
 
-        public object GetValueFromNamedCell(string columnStart)
+        public DataTable GetValueFromRangeByID(string text)
         {
             throw new NotImplementedException();
         }
 
-        public DataTable GetValueFromNamedRange(string name)
+        public DataTable GetValueFromRangeByName(string namedRange)
         {
             throw new NotImplementedException();
         }
 
-        public DataTable GetValueFromRange(string text)
+        public DataTable GetWorksheetContent()
         {
-            throw new NotImplementedException();
-        }
-
-        public DataTable GetWorksheetContent(string worksheetName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DataTable GetWorksheetContent(int worksheetIndex)
-        {
-            throw new NotImplementedException();
+            var dataTable = new DataTable();
+            return dataTable;
         }
 
         /// <summary>
@@ -100,14 +121,38 @@ namespace Model.Providers
             return this;
         }
 
-        public DataSet ToDataSet(bool isFirstRowAsColumnNames)
+        public DataSet ToDataSet()
+        {
+            throw new ApplicationException("Methode is not supported by this provider");
+        }
+
+        public IExcelReaderProvider WithFirstRowAsColumnName(bool isFirstRowAsColumnName)
         {
             throw new NotImplementedException();
         }
 
-        public object GetValue(int row, int column)
+        /// <summary>
+        /// Sets the current worksheet by Name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider SetCurrentWorksheet(string name)
         {
-            throw new NotImplementedException();
+            if (_sheetCollection[name] != null)
+                CurrentWorksheetName = name;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the current worksheet by his index
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider SetCurrentWorksheet(int index)
+        {
+            if (_sheetCollection[index] != null)
+                CurrentWorksheetName = _sheetCollection[index].SheetName;
+            return this;
         }
     }
 }

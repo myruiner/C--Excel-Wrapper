@@ -16,26 +16,14 @@ namespace Model.Providers
     /// </summary>
     public class ExcelDataReaderProvider : IExcelReaderProvider
     {
+        private int _currentActiveWorksheet;
         private DataSet _internalDataSet;
         private bool _isFirstRowAsColumnNames;
         private IExcelDataReader _reader;
-        private int _currentActiveWorksheet;
 
         /// <summary>
-        /// Gets the name of the value by.
+        /// Loads the internal data set.
         /// </summary>
-        /// <param name="cellName">Name of the cell.</param>
-        /// <returns></returns>
-        public object GetValueByName(string cellName)
-        {
-            object res = null;
-            while (_reader.Read())
-            {
-                int index = _reader.GetOrdinal(cellName);
-            }
-            return res;
-        }
-
         private void LoadInternalDataSet()
         {
             _reader.IsFirstRowAsColumnNames = _isFirstRowAsColumnNames;
@@ -52,66 +40,87 @@ namespace Model.Providers
             _reader.Dispose();
         }
 
-        public object GetValueFromCell(int column, int row)
+        /// <summary>
+        /// Gets the content of cell identified by ID
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="row">The row.</param>
+        /// <returns></returns>
+        public object GetValueFromCellByID(int column, int row)
+        {
+            if (_internalDataSet == null)
+                throw new ApplicationException("Internal DataSet is null");
+
+            try
+            {
+                return _internalDataSet.Tables[_currentActiveWorksheet].Rows[row][column];
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public object GetValueFromCellByAddress(string cellDescription)
         {
             throw new NotImplementedException();
         }
 
-        public object GetValueFromCell(string column)
+        /// <summary>
+        /// Gets the name of the value from cell by.
+        /// </summary>
+        /// <param name="columnStart">The column start.</param>
+        /// <returns></returns>
+        public object GetValueFromCellByName(string columnStart)
         {
-            throw new ApplicationException("This provider does not support accessing a cell with the corresponding Text description");
+            throw new ApplicationException("This provider does not support named cells");
         }
 
-        public DataTable GetValueFromRange(int columnStart, int rowStart, int colunmnEnd, int rowEnd)
+        /// <summary>
+        /// Gets the content of a range identified by his ID
+        /// </summary>
+        /// <param name="columnStart">The column start.</param>
+        /// <param name="rowStart">The row start.</param>
+        /// <param name="colunmnEnd">The colunmn end.</param>
+        /// <param name="rowEnd">The row end.</param>
+        /// <returns></returns>
+        public DataTable GetValueFromRangeByID(int columnStart, int rowStart, int colunmnEnd, int rowEnd)
         {
             throw new NotImplementedException();
         }
 
-        public object GetValueFromNamedCell(string columnStart)
+        public DataTable GetValueFromRangeByAddress(string address)
         {
-            throw new ApplicationException("This provider does not support named cell");
-        }
-
-        public DataTable GetValueFromNamedRange(string name)
-        {
-            throw new ApplicationException("This provider does not support named range");
-        }
-
-        public DataTable GetValueFromRange(string text)
-        {
-            throw new ApplicationException("This provider does not support accessing a range by the corresponding Text description");
+            throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Return the named specified Worksheet as a DataTable
+        /// Gets the content of a range identified by his name
         /// </summary>
-        /// <param name="worksheetName">Name of the worksheet.</param>
+        /// <param name="namedRange">The named range.</param>
         /// <returns></returns>
-        public DataTable GetWorksheetContent(string worksheetName)
+        public DataTable GetValueFromRangeByName(string namedRange)
         {
-            if (_internalDataSet == null)
-                throw new ApplicationException("Internal DataSet is null");
-            if (!_internalDataSet.Tables.Contains(worksheetName))
-                throw new ApplicationException(string.Format("Worksheet with name {0} does not exist in this Spreasheet", worksheetName));
-
-            return _internalDataSet.Tables[worksheetName];
+            throw new ApplicationException("This provider does not support named ranges");
         }
 
         /// <summary>
-        /// Return the index specified Worksheet as a DataTable
+        /// Return the current speicified Worksheet as a DataTable
         /// </summary>
-        /// <param name="worksheetIndex">Index of the worksheet.</param>
         /// <returns></returns>
-        public DataTable GetWorksheetContent(int worksheetIndex)
+        public DataTable GetWorksheetContent()
         {
             if (_internalDataSet == null)
                 throw new ApplicationException("Internal DataSet is null");
-            if (_internalDataSet.Tables.Count <= worksheetIndex)
-                throw new ApplicationException(string.Format("Worksheet with index {0} does not exist in this Spreasheet", worksheetIndex));
 
-            return _internalDataSet.Tables[worksheetIndex];
+            return _internalDataSet.Tables[_currentActiveWorksheet];
         }
 
+        /// <summary>
+        /// Loads Content from a Binary file.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
         public IExcelReaderProvider LoadFromBinaryFile(FileStream stream)
         {
             _reader = ExcelReaderFactory.CreateBinaryReader(stream);
@@ -123,13 +132,39 @@ namespace Model.Providers
             return this;
         }
 
-        public IExcelReaderProvider SetCurrentWorksheet(string name)
+        /// <summary>
+        /// Sets the current worksheet.
+        /// </summary>
+        /// <param name="worksheetName">Name of the worksheet.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider SetCurrentWorksheet(string worksheetName)
         {
+            if (_internalDataSet == null)
+                throw new ApplicationException("Internal DataSet is null");
+
+            if (!_internalDataSet.Tables.Contains(worksheetName))
+                throw new ApplicationException(string.Format(
+                    "Worksheet with name {0} does not exist in this Spreasheet", worksheetName));
+
+            _currentActiveWorksheet = _internalDataSet.Tables.IndexOf(worksheetName);
             return this;
         }
 
-        public IExcelReaderProvider SetCurrentWorksheet(int index)
+        /// <summary>
+        /// Sets the current worksheet.
+        /// </summary>
+        /// <param name="worksheetIndex">Index of the worksheet.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider SetCurrentWorksheet(int worksheetIndex)
         {
+            if (_internalDataSet == null)
+                throw new ApplicationException("Internal DataSet is null");
+
+            if (_internalDataSet.Tables.Count <= worksheetIndex)
+                throw new ApplicationException(
+                    string.Format("Worksheet with index {0} does not exist in this Spreasheet", worksheetIndex));
+
+            _currentActiveWorksheet = worksheetIndex;
             return this;
         }
 
