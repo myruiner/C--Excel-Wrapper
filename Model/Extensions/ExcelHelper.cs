@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using Model.Frame;
 
 namespace Model.Extensions
 {
@@ -19,7 +20,7 @@ namespace Model.Extensions
         /// </summary>
         /// <param name="source">The source.</param>
         /// <returns></returns>
-        public static FileInfo CopyStreamToTemp(this Stream source)
+        public static TemporaryFileInfo CopyStreamToTempFileInfo(this Stream source)
         {
             var path = Path.GetTempPath();
             var fileName = Guid.NewGuid().ToString();
@@ -42,7 +43,7 @@ namespace Model.Extensions
                     target.Close();
                 }
             }
-            return new FileInfo(targetPath);
+            return new TemporaryFileInfo(targetPath);
         }
     }
 }

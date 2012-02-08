@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ExcelHelper.cs" />
+    <Compile Include="Frame\TemporaryFileInfo.cs" />
     <Compile Include="Providers\CodaxyExcelProvider.cs" />
     <Compile Include="ExcelReader.cs" />
     <Compile Include="IExcelReaderProvider.cs" />

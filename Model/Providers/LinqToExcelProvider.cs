@@ -8,7 +8,9 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using LinqToExcel;
+using LinqToExcel.Domain;
 using Model.Extensions;
+using Model.Frame;
 
 namespace Model.Providers
 {
@@ -19,19 +21,44 @@ namespace Model.Providers
     /// </summary>
     public class LinqToExcelProvider : IExcelReaderProvider
     {
+        private ExcelQueryFactory _excelQueryFactory;
+        private TemporaryFileInfo _temporaryFileInfo;
+        private int _currentActiveWorksheet;
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _temporaryFileInfo.Dispose();
         }
 
+        /// <summary>
+        /// Gets the content of cell identified by ID
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="row">The row.</param>
+        /// <returns></returns>
         public object GetValueFromCellByID(int column, int row)
         {
-            throw new NotImplementedException();
+            var query = from c in _excelQueryFactory.WorksheetNoHeader(_currentActiveWorksheet)
+                        select c[column];
+            if (query.Count() == 0 || query.Count() < row)
+                return DBNull.Value;
+            return query.ToList().ElementAt(row).Value;
         }
 
+        /// <summary>
+        /// Gets the content of cell identified by his ID
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
         public object GetValueFromCellByAddress(string address)
         {
-            throw new NotImplementedException();
+            var query = from c in _excelQueryFactory.WorksheetRangeNoHeader(address, address, _currentActiveWorksheet)
+                        select c;
+
+            return null;
         }
 
         public object GetValueFromCellByName(string namedCell)
@@ -59,34 +86,50 @@ namespace Model.Providers
             throw new NotImplementedException();
         }
 
-        public IExcelReaderProvider LoadFromBinaryFile(FileStream stream)
+        /// <summary>
+        /// Loads from file.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
+        private IExcelReaderProvider LoadFromFile(FileStream stream)
         {
-            var randomOutput = Path.GetRandomFileName();
-            var randomFullPath = Path.Combine(Path.GetTempPath(), randomOutput);
-
-            var tempFile = stream.CopyStreamToTemp();
-
-            var excelReader = new ExcelQueryFactory(tempFile.FullName);
-
-            var indianaCompanies = from c in excelReader.WorksheetRangeNoHeader("A1", "G10") //Selects data within the B3 to G10 cell range
-                                   select c;
-            tempFile.Delete();
+            _temporaryFileInfo = stream.CopyStreamToTempFileInfo();
+            _excelQueryFactory = new ExcelQueryFactory(_temporaryFileInfo.GetFileFinfo().FullName);
             return this;
         }
 
+        /// <summary>
+        /// Loads Content from a Binary file.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
+        public IExcelReaderProvider LoadFromBinaryFile(FileStream stream)
+        {
+            _excelQueryFactory.DatabaseEngine = DatabaseEngine.Jet;
+            return LoadFromFile(stream);
+        }
+
+        /// <summary>
+        /// Loads content from an OpenXML file.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
         public IExcelReaderProvider LoadFromOpenXMLFile(FileStream stream)
         {
-            throw new NotImplementedException();
+            _excelQueryFactory.DatabaseEngine = DatabaseEngine.Ace;
+            return LoadFromFile(stream);
         }
 
         public IExcelReaderProvider SetCurrentWorksheet(string name)
         {
-            throw new NotImplementedException();
+            _currentActiveWorksheet = 0;
+            return this;
         }
 
         public IExcelReaderProvider SetCurrentWorksheet(int index)
         {
-            throw new NotImplementedException();
+            _currentActiveWorksheet = index;
+            return this;
         }
 
         public DataSet ToDataSet()
