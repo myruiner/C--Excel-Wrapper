@@ -19,12 +19,16 @@ namespace Model.Extensions
         /// Copies the stream to temp.
         /// </summary>
         /// <param name="source">The source.</param>
+        /// <param name="extension">The extension.</param>
         /// <returns></returns>
-        public static TemporaryFileInfo CopyStreamToTempFileInfo(this Stream source)
+        public static TemporaryFileInfo CopyStreamToTempFileInfo(this Stream source, string extension = null)
         {
             var path = Path.GetTempPath();
             var fileName = Guid.NewGuid().ToString();
             var targetPath = Path.Combine(path, fileName);
+
+            if (!string.IsNullOrEmpty(extension))
+                targetPath = targetPath + "." + extension;
 
             using (var target = File.Open(targetPath, FileMode.OpenOrCreate, FileAccess.Write))
             {

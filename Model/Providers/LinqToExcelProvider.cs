@@ -8,7 +8,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using LinqToExcel;
-using LinqToExcel.Domain;
 using Model.Extensions;
 using Model.Frame;
 
@@ -87,26 +86,15 @@ namespace Model.Providers
         }
 
         /// <summary>
-        /// Loads from file.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
-        private IExcelReaderProvider LoadFromFile(FileStream stream)
-        {
-            _temporaryFileInfo = stream.CopyStreamToTempFileInfo();
-            _excelQueryFactory = new ExcelQueryFactory(_temporaryFileInfo.GetFileFinfo().FullName);
-            return this;
-        }
-
-        /// <summary>
         /// Loads Content from a Binary file.
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <returns></returns>
         public IExcelReaderProvider LoadFromBinaryFile(FileStream stream)
         {
-            _excelQueryFactory.DatabaseEngine = DatabaseEngine.Jet;
-            return LoadFromFile(stream);
+            _temporaryFileInfo = stream.CopyStreamToTempFileInfo("xlsx");
+            _excelQueryFactory = new ExcelQueryFactory(_temporaryFileInfo.GetFileFinfo().FullName);
+            return this;
         }
 
         /// <summary>
@@ -116,8 +104,9 @@ namespace Model.Providers
         /// <returns></returns>
         public IExcelReaderProvider LoadFromOpenXMLFile(FileStream stream)
         {
-            _excelQueryFactory.DatabaseEngine = DatabaseEngine.Ace;
-            return LoadFromFile(stream);
+            _temporaryFileInfo = stream.CopyStreamToTempFileInfo("xlsx");
+            _excelQueryFactory = new ExcelQueryFactory(_temporaryFileInfo.GetFileFinfo().FullName);
+            return this;
         }
 
         public IExcelReaderProvider SetCurrentWorksheet(string name)
