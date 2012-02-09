@@ -1,5 +1,5 @@
+using ExcelReader.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Model.Providers;
 
 namespace Tests
 {

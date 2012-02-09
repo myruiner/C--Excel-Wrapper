@@ -10,7 +10,7 @@ using System.Data;
 using System.IO;
 using Excel;
 
-namespace Model.Providers
+namespace ExcelReader.Providers
 {
     /// <summary>
     /// TODO: Update summary.

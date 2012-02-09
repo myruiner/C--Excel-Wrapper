@@ -7,7 +7,7 @@
 using System;
 using System.IO;
 
-namespace Model
+namespace ExcelReader
 {
     /// <summary>
     /// TODO: Update summary.

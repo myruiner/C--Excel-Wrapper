@@ -4,11 +4,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Model.Frame
-{
-    using System;
-    using System.IO;
+using System;
+using System.IO;
 
+namespace ExcelReader.Frame
+{
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

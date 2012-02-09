@@ -9,7 +9,7 @@ using System.Collections;
 using System.Data;
 using System.IO;
 
-namespace Model
+namespace ExcelReader
 {
     /// <summary>
     /// TODO: Update summary.
@@ -17,19 +17,19 @@ namespace Model
     public interface IExcelReaderProvider : IDisposable
     {
         /// <summary>
+        /// Gets the content of cell identified by his ID
+        /// </summary>
+        /// <param name="address"> </param>
+        /// <returns></returns>
+        object GetValueFromCellByAddress(string address);
+
+        /// <summary>
         /// Gets the content of cell identified by ID
         /// </summary>
         /// <param name="column">The column.</param>
         /// <param name="row">The row.</param>
         /// <returns></returns>
         object GetValueFromCellByID(int column, int row);
-
-        /// <summary>
-        /// Gets the content of cell identified by his ID
-        /// </summary>
-        /// <param name="address"> </param>
-        /// <returns></returns>
-        object GetValueFromCellByAddress(string address);
 
         /// <summary>
         /// Gets the content of cell identified by his name
@@ -41,20 +41,20 @@ namespace Model
         /// <summary>
         /// Gets the content of a range identified by his ID
         /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="address"> </param>
+        /// <returns></returns>
+        DataTable GetValueFromRangeByAddress(string address);
+
+        /// <summary>
+        /// Gets the content of a range identified by his ID
+        /// </summary>
         /// <param name="columnStart">The column start.</param>
         /// <param name="rowStart">The row start.</param>
         /// <param name="colunmnEnd">The colunmn end.</param>
         /// <param name="rowEnd">The row end.</param>
         /// <returns></returns>
         DataTable GetValueFromRangeByID(int columnStart, int rowStart, int colunmnEnd, int rowEnd);
-
-        /// <summary>
-        /// Gets the content of a range identified by his ID
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <param name="address"> </param>
-        /// <returns></returns>
-        DataTable GetValueFromRangeByAddress(string address);
 
         /// <summary>
         /// Gets the content of a range identified by his name

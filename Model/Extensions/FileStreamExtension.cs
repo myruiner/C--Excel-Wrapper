@@ -6,14 +6,14 @@
 
 using System;
 using System.IO;
-using Model.Frame;
+using ExcelReader.Frame;
 
-namespace Model.Extensions
+namespace ExcelReader.Extensions
 {
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public static class ExcelHelper
+    public static class FileStreamExtension
     {
         /// <summary>
         /// Copies the stream to temp.
@@ -21,16 +21,16 @@ namespace Model.Extensions
         /// <param name="source">The source.</param>
         /// <param name="extension">The extension.</param>
         /// <returns></returns>
-        public static TemporaryFileInfo CopyStreamToTempFileInfo(this Stream source, string extension = null)
+        public static TemporaryFileInfo CopyStreamToTempAndReturnFileInfo(this Stream source, string extension = null)
         {
-            var path = Path.GetTempPath();
-            var fileName = Guid.NewGuid().ToString();
-            var targetPath = Path.Combine(path, fileName);
+            string path = Path.GetTempPath();
+            string fileName = Guid.NewGuid().ToString();
+            string targetPath = Path.Combine(path, fileName);
 
             if (!string.IsNullOrEmpty(extension))
                 targetPath = targetPath + "." + extension;
 
-            using (var target = File.Open(targetPath, FileMode.OpenOrCreate, FileAccess.Write))
+            using (FileStream target = File.Open(targetPath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 var buffer = new byte[0x10000];
                 try

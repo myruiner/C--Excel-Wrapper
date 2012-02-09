@@ -4,14 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Data;
 using System.IO;
 
-namespace Model.Providers
+namespace ExcelReader.Providers
 {
-    using System;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

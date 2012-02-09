@@ -4,45 +4,47 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using ExcelReader.Extensions;
+using ExcelReader.Frame;
 using LinqToExcel;
-using Model.Extensions;
-using Model.Frame;
+using Row = LinqToExcel.Row;
 
-namespace Model.Providers
+namespace ExcelReader.Providers
 {
-    using System;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class LinqToExcelProvider : IExcelReaderProvider
     {
-        private ExcelQueryFactory _excelQueryFactory;
-        private TemporaryFileInfo _temporaryFileInfo;
-        private int _currentActiveWorksheet;
-
         /// <summary>
         /// Return single value from Query
         /// </summary>
         private readonly Func<IQueryable<Cell>, int, object> _returnSingleValueFromQuery = (query, i) =>
-        {
-            if (query.Count() == 0 || query.Count() < i)
-                return DBNull.Value;
-            return
-                query.ToList().ElementAt(i).
-                    Value;
-        };
+                                                                                               {
+                                                                                                   if (query.Count() == 0 || query.Count() < i)
+                                                                                                       return DBNull.Value;
+                                                                                                   return
+                                                                                                       query.ToList().ElementAt(i).Value;
+                                                                                               };
+
+        private int _currentActiveWorksheetID;
+        private string _currentActiveWorksheetName;
+        private ExcelQueryFactory _excelQueryFactory;
+        private TemporaryFileInfo _temporaryFileInfo;
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
-            _temporaryFileInfo.Dispose();
+            if (_temporaryFileInfo != null)
+                _temporaryFileInfo.Dispose();
         }
 
         /// <summary>
@@ -53,9 +55,20 @@ namespace Model.Providers
         /// <returns></returns>
         public object GetValueFromCellByID(int column, int row)
         {
-            var query = from c in _excelQueryFactory.WorksheetNoHeader(_currentActiveWorksheet)
+            var query = from c in (IQueryable<IList<Cell>>)_excelQueryFactory.WorksheetNoHeader(GetCurrentWorksheet())
                         select c[column];
             return _returnSingleValueFromQuery(query, row);
+        }
+
+        /// <summary>
+        /// Gets the current worksheet.
+        /// </summary>
+        /// <returns></returns>
+        private dynamic GetCurrentWorksheet()
+        {
+            return string.IsNullOrEmpty(_currentActiveWorksheetName)
+                       ? (dynamic)_currentActiveWorksheetID
+                       : _currentActiveWorksheetName;
         }
 
         /// <summary>
@@ -65,8 +78,9 @@ namespace Model.Providers
         /// <returns></returns>
         public object GetValueFromCellByAddress(string address)
         {
-            var query = from c in _excelQueryFactory.WorksheetRangeNoHeader(address, address, _currentActiveWorksheet)
-                        select c;
+            var query =
+                from c in (IQueryable<IList<Cell>>)_excelQueryFactory.WorksheetRangeNoHeader(address, address, GetCurrentWorksheet())
+                select c;
             return query.Count() > 0 ? query.ToList().ElementAt(0)[0].Value : DBNull.Value;
         }
 
@@ -92,8 +106,8 @@ namespace Model.Providers
 
         public IEnumerable GetWorksheetContent()
         {
-            var query = from c in _excelQueryFactory.Worksheet(_currentActiveWorksheet)
-                        select c;
+            IQueryable<Row> query = from c in _excelQueryFactory.Worksheet(_currentActiveWorksheetID)
+                                    select c;
             return query.ToList();
         }
 
@@ -104,7 +118,7 @@ namespace Model.Providers
         /// <returns></returns>
         public IExcelReaderProvider LoadFromBinaryFile(FileStream stream)
         {
-            _temporaryFileInfo = stream.CopyStreamToTempFileInfo("xlsx");
+            _temporaryFileInfo = stream.CopyStreamToTempAndReturnFileInfo("xlsx");
             _excelQueryFactory = new ExcelQueryFactory(_temporaryFileInfo.GetFileFinfo().FullName);
             return this;
         }
@@ -116,20 +130,20 @@ namespace Model.Providers
         /// <returns></returns>
         public IExcelReaderProvider LoadFromOpenXMLFile(FileStream stream)
         {
-            _temporaryFileInfo = stream.CopyStreamToTempFileInfo("xlsx");
+            _temporaryFileInfo = stream.CopyStreamToTempAndReturnFileInfo("xlsx");
             _excelQueryFactory = new ExcelQueryFactory(_temporaryFileInfo.GetFileFinfo().FullName);
             return this;
         }
 
         public IExcelReaderProvider SetCurrentWorksheet(string name)
         {
-            _currentActiveWorksheet = 0;
+            _currentActiveWorksheetName = name;
             return this;
         }
 
         public IExcelReaderProvider SetCurrentWorksheet(int index)
         {
-            _currentActiveWorksheet = index;
+            _currentActiveWorksheetID = index;
             return this;
         }
 

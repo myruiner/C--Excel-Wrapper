@@ -2,23 +2,23 @@
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using ExcelReader;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Model;
 
 namespace Tests
 {
     [TestClass]
     public abstract class BaseExcelReaderTest
     {
-        protected ExcelReader ReaderService;
+        protected ExcelReader.ExcelReader ReaderService;
         protected IExcelReaderProvider Provider;
-        protected Func<ExcelReader, FileStream, IExcelReaderProvider> FileLoader;
+        protected Func<ExcelReader.ExcelReader, FileStream, IExcelReaderProvider> FileLoader;
         protected bool IsOpenXML;
 
         [TestInitialize]
         public void SetupExcelReader()
         {
-            ReaderService = ExcelReader.ConfigureProvider(Provider);
+            ReaderService = ExcelReader.ExcelReader.ConfigureProvider(Provider);
             FileLoader = (reader, stream) => reader.LoadFile(stream, IsOpenXML);
         }
 
@@ -63,7 +63,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public virtual void ParseBasicContentByCellID_ReturnSucccess()
+        public virtual void ParseBasicContentByWorksheetIDAndCellID_ReturnSucccess()
         {
             using (var stream = File.Open(GetExcelPath("Basic"), FileMode.Open, FileAccess.Read))
             {
@@ -76,7 +76,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public virtual void ParseBasicContentByCellAddress_ReturnSucccess()
+        public virtual void ParseBasicContentByWorksheetIDAndCellAddress_ReturnSucccess()
         {
             using (var stream = File.Open(GetExcelPath("Basic"), FileMode.Open, FileAccess.Read))
             {
@@ -85,6 +85,30 @@ namespace Tests
                 Assert.AreEqual(DBNull.Value, loadedProvider.SetCurrentWorksheet(0).GetValueFromCellByAddress("B2"));
                 Assert.AreEqual(new DateTime(2011, 1, 13), DateTime.ParseExact(loadedProvider.SetCurrentWorksheet(0).GetValueFromCellByAddress("C3").ToString(), "d.M.yyyy", CultureInfo.InvariantCulture));
                 Assert.AreEqual("NameCell", loadedProvider.SetCurrentWorksheet(0).GetValueFromCellByAddress("C4").ToString());
+            }
+        }
+
+        [TestMethod]
+        public virtual void ParseBasicContentByWorksheetNameAndCellID_ReturnSucccess()
+        {
+            using (var stream = File.Open(GetExcelPath("Basic"), FileMode.Open, FileAccess.Read))
+            {
+                var loadedProvider = FileLoader.Invoke(ReaderService, stream);
+                Assert.AreEqual(DBNull.Value, loadedProvider.SetCurrentWorksheet("WS2").GetValueFromCellByID(0, 0));
+                Assert.AreEqual(1.2d, double.Parse(loadedProvider.SetCurrentWorksheet("WS2").GetValueFromCellByID(1, 0).ToString()));
+                Assert.AreEqual("Test", loadedProvider.SetCurrentWorksheet("WS2").GetValueFromCellByID(2, 2).ToString());
+            }
+        }
+
+        [TestMethod]
+        public virtual void ParseBasicContentByWorksheetNameAndCellAddress_ReturnSucccess()
+        {
+            using (var stream = File.Open(GetExcelPath("Basic"), FileMode.Open, FileAccess.Read))
+            {
+                var loadedProvider = FileLoader.Invoke(ReaderService, stream);
+                Assert.AreEqual(DBNull.Value, loadedProvider.SetCurrentWorksheet("WS2").GetValueFromCellByAddress("A1"));
+                Assert.AreEqual(1.2d, double.Parse(loadedProvider.SetCurrentWorksheet("WS2").GetValueFromCellByAddress("B1").ToString()));
+                Assert.AreEqual("Test", loadedProvider.SetCurrentWorksheet("WS2").GetValueFromCellByAddress("C3").ToString());
             }
         }
 

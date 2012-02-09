@@ -10,16 +10,15 @@ using System.Data;
 using System.IO;
 using Codaxy.Xlio;
 
-namespace Model.Providers
+namespace ExcelReader.Providers
 {
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class CodaxyExcelProvider : IExcelReaderProvider
     {
-        private SheetCollection _sheetCollection;
-
         private string _currentWorksheetName;
+        private SheetCollection _sheetCollection;
 
         /// <summary>
         /// Gets or sets the name of the current worksheet.
@@ -36,6 +35,11 @@ namespace Model.Providers
                 return _currentWorksheetName;
             }
             set { _currentWorksheetName = value; }
+        }
+
+        public DataTable GetValueFromRangeByID(string text)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -76,11 +80,6 @@ namespace Model.Providers
             throw new NotImplementedException();
         }
 
-        public DataTable GetValueFromRangeByID(string text)
-        {
-            throw new NotImplementedException();
-        }
-
         public DataTable GetValueFromRangeByName(string namedRange)
         {
             throw new NotImplementedException();
@@ -111,7 +110,7 @@ namespace Model.Providers
         {
             try
             {
-                var wb = Workbook.ReadStream(stream);
+                Workbook wb = Workbook.ReadStream(stream);
                 _sheetCollection = wb.Sheets;
             }
             catch

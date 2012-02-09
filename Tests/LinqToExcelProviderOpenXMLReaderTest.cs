@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Model.Providers;
+﻿using ExcelReader.Providers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
 {
@@ -13,6 +13,11 @@ namespace Tests
         {
             Provider = new LinqToExcelProvider();
             IsOpenXML = true;
+        }
+
+        [TestMethod]
+        public override void LoadWorkbookWithWrongFormat_ReturnException()
+        {
         }
     }
 }
