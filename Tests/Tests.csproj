@@ -95,9 +95,9 @@
     <Compile Include="ExcelReaderProviderBinaryReaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj">
+    <ProjectReference Include="..\Model\ExcelReader.csproj">
       <Project>{413D34FE-ACE9-40FD-A37A-C3CF16C943F0}</Project>
-      <Name>Model</Name>
+      <Name>ExcelReader</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
