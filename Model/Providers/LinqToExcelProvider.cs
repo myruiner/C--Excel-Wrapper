@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Collections;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,18 @@ namespace Model.Providers
         private int _currentActiveWorksheet;
 
         /// <summary>
+        /// Return single value from Query
+        /// </summary>
+        private readonly Func<IQueryable<Cell>, int, object> _returnSingleValueFromQuery = (query, i) =>
+        {
+            if (query.Count() == 0 || query.Count() < i)
+                return DBNull.Value;
+            return
+                query.ToList().ElementAt(i).
+                    Value;
+        };
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
@@ -42,9 +55,7 @@ namespace Model.Providers
         {
             var query = from c in _excelQueryFactory.WorksheetNoHeader(_currentActiveWorksheet)
                         select c[column];
-            if (query.Count() == 0 || query.Count() < row)
-                return DBNull.Value;
-            return query.ToList().ElementAt(row).Value;
+            return _returnSingleValueFromQuery(query, row);
         }
 
         /// <summary>
@@ -56,8 +67,7 @@ namespace Model.Providers
         {
             var query = from c in _excelQueryFactory.WorksheetRangeNoHeader(address, address, _currentActiveWorksheet)
                         select c;
-
-            return null;
+            return query.Count() > 0 ? query.ToList().ElementAt(0)[0].Value : DBNull.Value;
         }
 
         public object GetValueFromCellByName(string namedCell)
@@ -80,9 +90,11 @@ namespace Model.Providers
             throw new NotImplementedException();
         }
 
-        public DataTable GetWorksheetContent()
+        public IEnumerable GetWorksheetContent()
         {
-            throw new NotImplementedException();
+            var query = from c in _excelQueryFactory.Worksheet(_currentActiveWorksheet)
+                        select c;
+            return query.ToList();
         }
 
         /// <summary>

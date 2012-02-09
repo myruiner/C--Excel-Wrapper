@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Data;
 using System.IO;
 
@@ -66,7 +67,7 @@ namespace Model
         /// Return the current speicified Worksheet as a DataTable
         /// </summary>
         /// <returns></returns>
-        DataTable GetWorksheetContent();
+        IEnumerable GetWorksheetContent();
 
         /// <summary>
         /// Loads Content from a Binary file.

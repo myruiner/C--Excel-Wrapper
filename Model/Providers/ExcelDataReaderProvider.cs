@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Data;
 using System.IO;
 using Excel;
@@ -108,12 +109,12 @@ namespace Model.Providers
         /// Return the current speicified Worksheet as a DataTable
         /// </summary>
         /// <returns></returns>
-        public DataTable GetWorksheetContent()
+        public IEnumerable GetWorksheetContent()
         {
             if (_internalDataSet == null)
                 throw new ApplicationException("Internal DataSet is null");
 
-            return _internalDataSet.Tables[_currentActiveWorksheet];
+            return _internalDataSet.Tables[_currentActiveWorksheet].AsEnumerable();
         }
 
         /// <summary>

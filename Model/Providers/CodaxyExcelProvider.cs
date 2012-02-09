@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Data;
 using System.IO;
 using Codaxy.Xlio;
@@ -85,10 +86,10 @@ namespace Model.Providers
             throw new NotImplementedException();
         }
 
-        public DataTable GetWorksheetContent()
+        public IEnumerable GetWorksheetContent()
         {
             var dataTable = new DataTable();
-            return dataTable;
+            return dataTable.AsEnumerable();
         }
 
         /// <summary>

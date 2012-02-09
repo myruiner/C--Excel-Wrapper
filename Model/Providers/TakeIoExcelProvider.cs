@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Collections;
 using System.Data;
 using System.IO;
 
@@ -51,7 +52,7 @@ namespace Model.Providers
             throw new NotImplementedException();
         }
 
-        public DataTable GetWorksheetContent()
+        public IEnumerable GetWorksheetContent()
         {
             throw new NotImplementedException();
         }
