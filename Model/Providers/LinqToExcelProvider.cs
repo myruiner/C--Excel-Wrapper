@@ -13,7 +13,6 @@ using System.Linq;
 using ExcelReader.Extensions;
 using ExcelReader.Frame;
 using LinqToExcel;
-using Row = LinqToExcel.Row;
 
 namespace ExcelReader.Providers
 {
@@ -27,16 +26,32 @@ namespace ExcelReader.Providers
         /// </summary>
         private readonly Func<IQueryable<Cell>, int, object> _returnSingleValueFromQuery = (query, i) =>
                                                                                                {
-                                                                                                   if (query.Count() == 0 || query.Count() < i)
-                                                                                                       return DBNull.Value;
+                                                                                                   if (query.Count() ==
+                                                                                                       0 ||
+                                                                                                       query.Count() < i)
+                                                                                                       return
+                                                                                                           DBNull.Value;
                                                                                                    return
-                                                                                                       query.ToList().ElementAt(i).Value;
+                                                                                                       query.ToList().
+                                                                                                           ElementAt(i).
+                                                                                                           Value;
                                                                                                };
 
         private int _currentActiveWorksheetID;
         private string _currentActiveWorksheetName;
         private ExcelQueryFactory _excelQueryFactory;
         private TemporaryFileInfo _temporaryFileInfo;
+
+        /// <summary>
+        /// Gets the current worksheet.
+        /// </summary>
+        /// <returns></returns>
+        private dynamic GetCurrentWorksheet()
+        {
+            return string.IsNullOrEmpty(_currentActiveWorksheetName)
+                       ? (dynamic)_currentActiveWorksheetID
+                       : _currentActiveWorksheetName;
+        }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -55,20 +70,10 @@ namespace ExcelReader.Providers
         /// <returns></returns>
         public object GetValueFromCellByID(int column, int row)
         {
-            var query = from c in (IQueryable<IList<Cell>>)_excelQueryFactory.WorksheetNoHeader(GetCurrentWorksheet())
-                        select c[column];
+            var query =
+                from c in (IQueryable<IList<Cell>>)_excelQueryFactory.WorksheetNoHeader(GetCurrentWorksheet())
+                select c[column];
             return _returnSingleValueFromQuery(query, row);
-        }
-
-        /// <summary>
-        /// Gets the current worksheet.
-        /// </summary>
-        /// <returns></returns>
-        private dynamic GetCurrentWorksheet()
-        {
-            return string.IsNullOrEmpty(_currentActiveWorksheetName)
-                       ? (dynamic)_currentActiveWorksheetID
-                       : _currentActiveWorksheetName;
         }
 
         /// <summary>
@@ -78,8 +83,10 @@ namespace ExcelReader.Providers
         /// <returns></returns>
         public object GetValueFromCellByAddress(string address)
         {
-            var query =
-                from c in (IQueryable<IList<Cell>>)_excelQueryFactory.WorksheetRangeNoHeader(address, address, GetCurrentWorksheet())
+            IQueryable<IList<Cell>> query =
+                from c in
+                    (IQueryable<IList<Cell>>)
+                    _excelQueryFactory.WorksheetRangeNoHeader(address, address, GetCurrentWorksheet())
                 select c;
             return query.Count() > 0 ? query.ToList().ElementAt(0)[0].Value : DBNull.Value;
         }

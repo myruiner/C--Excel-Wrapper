@@ -74,6 +74,7 @@ namespace ExcelReader.Providers
         /// <returns></returns>
         public object GetValueFromCellByName(string columnStart)
         {
+            //_internalDataSet.Tables[_currentActiveWorksheet].Rows[0];
             throw new ApplicationException("This provider does not support named cells");
         }
 

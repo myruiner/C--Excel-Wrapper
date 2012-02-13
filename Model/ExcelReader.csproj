@@ -75,6 +75,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ExcelCell.cs" />
+    <Compile Include="Extensions\ExcelExtension.cs" />
     <Compile Include="Extensions\FileStreamExtension.cs" />
     <Compile Include="Frame\TemporaryFileInfo.cs" />
     <Compile Include="Providers\CodaxyExcelProvider.cs" />
