@@ -9,6 +9,7 @@ using System.Collections;
 using System.Data;
 using System.IO;
 using Codaxy.Xlio;
+using ExcelReader.Extensions;
 
 namespace ExcelReader.Providers
 {
@@ -37,11 +38,6 @@ namespace ExcelReader.Providers
             set { _currentWorksheetName = value; }
         }
 
-        public DataTable GetValueFromRangeByID(string text)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -60,9 +56,15 @@ namespace ExcelReader.Providers
             return _sheetCollection[CurrentWorksheetName].Cells[row, column].Value ?? DBNull.Value;
         }
 
-        public object GetValueFromCellByAddress(string cellDescription)
+        /// <summary>
+        /// Gets the value from cell by address.
+        /// </summary>
+        /// <param name="cellAddress">The cell address.</param>
+        /// <returns></returns>
+        public object GetValueFromCellByAddress(string cellAddress)
         {
-            throw new NotImplementedException();
+            ExcelCell cell = cellAddress.ToExcelCell();
+            return GetValueFromCellByID(cell.Column, cell.Row);
         }
 
         public object GetValueFromCellByName(string columnStart)

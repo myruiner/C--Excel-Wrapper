@@ -16,7 +16,7 @@ namespace ExcelReader.Extensions
     {
         public static ExcelCell ToExcelCell(this string columnName)
         {
-            var matching = Regex.Match(columnName, "([a-zA-Z]+)([1-9]+)", RegexOptions.IgnoreCase);
+            var matching = Regex.Match(columnName, "(^[a-zA-Z]+)([1-9]+)$", RegexOptions.IgnoreCase);
             if (!matching.Success || matching.Groups.Count != 3)
                 throw new ArgumentException(String.Format("Excel column Name :{0} is invalid :", columnName));
 

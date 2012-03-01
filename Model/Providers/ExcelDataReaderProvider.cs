@@ -9,6 +9,7 @@ using System.Collections;
 using System.Data;
 using System.IO;
 using Excel;
+using ExcelReader.Extensions;
 
 namespace ExcelReader.Providers
 {
@@ -62,9 +63,15 @@ namespace ExcelReader.Providers
             }
         }
 
-        public object GetValueFromCellByAddress(string cellDescription)
+        /// <summary>
+        /// Gets the value from cell by address.
+        /// </summary>
+        /// <param name="cellAddress">The cell address.</param>
+        /// <returns></returns>
+        public object GetValueFromCellByAddress(string cellAddress)
         {
-            throw new NotImplementedException();
+            var cell = cellAddress.ToExcelCell();
+            return GetValueFromCellByID(cell.Column, cell.Row);
         }
 
         /// <summary>
@@ -74,8 +81,7 @@ namespace ExcelReader.Providers
         /// <returns></returns>
         public object GetValueFromCellByName(string columnStart)
         {
-            //_internalDataSet.Tables[_currentActiveWorksheet].Rows[0];
-            throw new ApplicationException("This provider does not support named cells");
+            throw new NotImplementedException();
         }
 
         /// <summary>
